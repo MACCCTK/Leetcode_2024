@@ -1,0 +1,78 @@
+//递归
+class Solution {
+public:
+    void order(TreeNode* cur, vector<vector<int>>& result, int depth)
+    {
+        if (cur == nullptr) return;
+        if (result.size() == depth) result.push_back(vector<int>());
+        result[depth].push_back(cur->val);
+        order(cur->left, result, depth + 1);
+        order(cur->right, result, depth + 1);
+    }
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        vector<vector<int>> result;
+        int depth = 0;
+        order(root, result, depth);
+        return result;
+        //从底到顶 reverse(result.begin(), result.end()); 
+    }
+};
+
+//迭代
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        queue<TreeNode*> que;
+        if (root != NULL) que.push(root);
+        vector<vector<int>> result;
+        while (!que.empty()) {
+            int size = que.size();
+            //最长路径/求深度：depth++;
+            vector<int> vec;
+            for (int i = 0; i < size; i++) {
+                TreeNode* node = que.front();
+                que.pop();
+                //vec.push_back(node->val);
+                //求最大值：maxValue = node->val > maxValue(INT_MIN) ? node->val : maxValue;
+                // 右视图：if (i == (size - 1)) result.push_back(node->val);
+                if (node->left) que.push(node->left);
+                if (node->right) que.push(node->right);
+                //N叉树：for (int i = 0; i < node->children.size(); i++) { if (node->children[i]) que.push(node->children[i]);}
+                //最短路径：if (!node->left && !node->right) {return depth;}
+            }
+            //求平均：sum += node->val; result.push_back(sum / size); 
+            result.push_back(vec);
+        }
+        return result;
+    }
+};
+
+//next指针（完全/非完全）
+class Solution {
+public:
+    Node* connect(Node* root) {
+        queue<Node*> que;
+        if (root != NULL) que.push(root);
+        while (!que.empty()) {
+            int size = que.size();
+            Node* nodePre;
+            Node* node;
+            for (int i = 0; i < size; i++) {
+                if (i == 0) {
+                    nodePre = que.front(); 
+                    que.pop();
+                    node = nodePre;
+                } else {
+                    node = que.front();
+                    que.pop();
+                    nodePre->next = node; 
+                    nodePre = nodePre->next;
+                }
+                if (node->left) que.push(node->left);
+                if (node->right) que.push(node->right);
+            }
+            nodePre->next = NULL;
+        }
+        return root;
+    }
+};

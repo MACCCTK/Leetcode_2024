@@ -1,0 +1,60 @@
+//迭代（对称）
+class Solution {
+public:
+    bool isSymmetric(TreeNode* root) {
+        if (root == NULL) return true;
+        queue<TreeNode*> que;
+        que.push(root->left);   
+        que.push(root->right); 
+        
+        while (!que.empty()) {  
+            TreeNode* leftNode = que.front(); que.pop();
+            TreeNode* rightNode = que.front(); que.pop();
+            if (!leftNode && !rightNode) { 
+                continue;
+            }
+            if ((!leftNode || !rightNode || (leftNode->val != rightNode->val))) {
+                return false;
+            }
+            que.push(leftNode->left);   
+            que.push(rightNode->right); 
+
+            que.push(leftNode->right);  
+            que.push(rightNode->left); 
+        }
+        return true;
+    }
+};
+
+//递归（完全）
+class Solution {
+public:
+    bool compare(TreeNode* left, TreeNode* right) {
+        if (left == NULL || right != NULL) return false;
+        else if (left != NULL && right == NULL) return false;
+        else if (left == NULL && right == NULL) return true;
+        else if (left->val != right->val) return false;
+        else return compare(left->left, right->left) && compare(left->right, right->right);
+
+    }
+    bool isSameTree(TreeNode* p, TreeNode* q) {
+        return compare(p, q);
+    }
+};
+
+//递归（子树）
+class Solution {
+public:
+    bool isSameTree(TreeNode* s, TreeNode* t) {
+         if (s == NULL && t == NULL) return true;
+        if (s == NULL || t == NULL) return false;
+        if (s->val != t->val) return false;
+        return isSameTree(s->left, t->left) && isSameTree(s->right, t->right);
+
+    }
+    bool isSubtree(TreeNode* root, TreeNode* subRoot) {
+        if (subRoot == NULL) return true;
+        if (root == NULL) return false;
+        return isSubtree(root->left, subRoot) || isSubtree(root->right, subRoot) || isSameTree(root,subRoot);
+    }
+};

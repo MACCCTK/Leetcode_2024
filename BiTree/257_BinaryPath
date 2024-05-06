@@ -1,7 +1,7 @@
 //递归
 class Solution {
 private:
-    void traversal(TreeNode* cur, vector<int>& path, vector<string>& result) {
+    void traversal(TreeNode* cur, vector<int>& path, vector<string>& result) {//string path
         path.push_back(cur->val);
         if (cur->left == NULL && cur->right == NULL) {
             string sPath;
@@ -14,7 +14,7 @@ private:
             return;
         }
         if (cur->left) {  
-            traversal(cur->left, path, result);
+            traversal(cur->left, path, result);//traversal(cur->left, path + "->", result)通过+“->”来实现回溯
             path.pop_back(); // 回溯
         }
         if (cur->right) { 
@@ -22,6 +22,7 @@ private:
             path.pop_back(); // 回溯
         }
     }
+
 
 public:
     vector<string> binaryTreePaths(TreeNode* root) {

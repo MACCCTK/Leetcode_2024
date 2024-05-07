@@ -1,0 +1,101 @@
+//递归
+class Solution {
+private:
+    bool traversal(TreeNode* cur, int count) {
+        if (!cur->left && !cur->right && count == 0) return true; 
+        if (!cur->left && !cur->right) return false; 
+
+        if (cur->left) {
+            count -= cur->left->val; 
+            if (traversal(cur->left, count)) return true;
+            count += cur->left->val; 
+        }
+        if (cur->right) { 
+            count -= cur->right->val; 
+            if (traversal(cur->right, count)) return true;
+            count += cur->right->val;
+        }
+        return false;
+    }
+
+public:
+    bool hasPathSum(TreeNode* root, int sum) {
+        if (root == NULL) return false;
+        return traversal(root, sum - root->val);
+    }
+};
+
+class Solution {
+public:
+    bool hasPathSum(TreeNode* root, int sum) {
+        if (!root) return false;
+        if (!root->left && !root->right && sum == root->val) {
+            return true;
+        }
+        return hasPathSum(root->left, sum - root->val) || hasPathSum(root->right, sum - root->val);
+    }
+};
+
+//迭代
+class solution {
+
+public:
+    bool haspathsum(TreeNode* root, int sum) {
+        if (root == null) return false;
+        stack<pair<TreeNode*, int>> st;
+        st.push(pair<TreeNode*, int>(root, root->val));
+        while (!st.empty()) {
+            pair<TreeNode*, int> node = st.top();
+            st.pop();
+            if (!node.first->left && !node.first->right && sum == node.second) return true;
+            if (node.first->right) {
+                st.push(pair<TreeNode*, int>(node.first->right, node.second + node.first->right->val));
+            }
+            if (node.first->left) {
+                st.push(pair<TreeNode*, int>(node.first->left, node.second + node.first->left->val));
+            }
+        }
+        return false;
+    }
+};
+
+
+class solution {
+private:
+    vector<vector<int>> result;
+    vector<int> path;
+    void traversal(TreeNode* cur, int count) {
+        if (!cur->left && !cur->right && count == 0) {
+            result.push_back(path);
+            return;
+        }
+
+        if (!cur->left && !cur->right) return ; 
+
+        if (cur->left) {
+            path.push_back(cur->left->val);
+            count -= cur->left->val;
+            traversal(cur->left, count);   
+            count += cur->left->val;     
+            path.pop_back();             
+        }
+        if (cur->right) { 
+            path.push_back(cur->right->val);
+            count -= cur->right->val;
+            traversal(cur->right, count);  
+            count += cur->right->val;      
+            path.pop_back();              
+        }
+        return ;
+    }
+
+public:
+    vector<vector<int>> pathSum(TreeNode* root, int sum) {
+        result.clear();
+        path.clear();
+        if (root == NULL) return result;
+        path.push_back(root->val);
+        traversal(root, sum - root->val);
+        return result;
+    }
+};

@@ -1,0 +1,29 @@
+class Solution {
+public:
+    TreeNode* searchBST(TreeNode* root, int val) {
+        TreeNode* subtree =new TreeNode();
+        if(root==nullptr||root->val==val){
+            return root;
+        }
+        else if(root->val>val){
+            subtree = searchBST(root->left,val);
+            return subtree;
+        }
+        else{
+            subtree = searchBST(root->right,val);
+            return subtree;
+        }
+    }
+};
+
+class Solution {
+public:
+    TreeNode* searchBST(TreeNode* root, int val) {
+        while (root != NULL) {
+            if (root->val > val) root = root->left;
+            else if (root->val < val) root = root->right;
+            else return root;
+        }
+        return NULL;
+    }
+};

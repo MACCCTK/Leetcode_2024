@@ -1,0 +1,58 @@
+class Solution {
+private:
+    vector<int> vec;
+    void traversal(TreeNode* root) {
+        if (root == NULL) return;
+        traversal(root->left);
+        vec.push_back(root->val); 
+        traversal(root->right);
+    }
+public:
+    bool isValidBST(TreeNode* root) {
+        vec.clear(); 
+        traversal(root);
+        for (int i = 1; i < vec.size(); i++) {
+            if (vec[i] <= vec[i - 1]) return false;
+        }
+        return true;
+    }
+};
+
+class Solution {
+public:
+    TreeNode* pre = NULL; 
+    bool isValidBST(TreeNode* root) {
+        if (root == NULL) return true;
+        bool left = isValidBST(root->left);//去到左叶节点开始回溯
+
+        if (pre != NULL && pre->val >= root->val) return false;
+        pre = root; 
+
+        bool right = isValidBST(root->right);
+        return left && right;
+    }
+};
+
+class Solution {
+public:
+    bool isValidBST(TreeNode* root) {
+        stack<TreeNode*> st;
+        TreeNode* cur = root;
+        TreeNode* pre = NULL; // 记录前一个节点
+        while (cur != NULL || !st.empty()) {
+            if (cur != NULL) {
+                st.push(cur);
+                cur = cur->left;               
+            } else {
+                cur = st.top();                
+                st.pop();
+                if (pre != NULL && cur->val <= pre->val){
+                return false;
+                }
+                pre = cur; //保存前一个访问的结点
+                cur = cur->right;              
+                }
+        }
+        return true;
+    }
+};

@@ -1,0 +1,49 @@
+class Solution {
+private:
+    vector<vector<string>> result;
+    vector<string> path; 
+    void backtracking (const string& s, int startIndex) {
+        if (startIndex >= s.size()) {//终止条件（i+1）
+            result.push_back(path);
+            return;
+        }
+        for (int i = startIndex; i < s.size(); i++) {//i负责切割
+            if (isPalindrome(s, startIndex, i)) {//isPalindrome[startIndex][i]判断子串是否是回文
+                string str = s.substr(startIndex, i - startIndex + 1);
+                path.push_back(str);
+            } else {                                
+                continue;
+            }
+            backtracking(s, i + 1); 
+            path.pop_back(); 
+        }
+    }
+    bool isPalindrome(const string& s, int start, int end) {
+        for (int i = start, j = end; i < j; i++, j--) {
+            if (s[i] != s[j]) {return false;}
+        }
+        return true;
+    }
+    
+//vector<vector<bool>> isPalindrome; // 放事先计算好的是否回文子串的结果
+//void computePalindrome(const string& s) {
+        // isPalindrome[i][j] 代表 s[i:j](双边包括)是否是回文字串 
+        isPalindrome.resize(s.size(), vector<bool>(s.size(), false)); // 根据字符串s, 刷新布尔矩阵的大小
+        for (int i = s.size() - 1; i >= 0; i--) { 
+            // 需要倒序计算, 保证在i行时, i+1行已经计算好了
+            for (int j = i; j < s.size(); j++) {
+                if (j == i) {isPalindrome[i][j] = true;}
+                else if (j - i == 1) {isPalindrome[i][j] = (s[i] == s[j]);}
+                else {isPalindrome[i][j] = (s[i] == s[j] && isPalindrome[i+1][j-1]);}//递归计算回文
+            }
+        }
+    }
+    
+public:
+    vector<vector<string>> partition(string s) {
+        result.clear();
+        path.clear();
+        backtracking(s, 0);
+        return result;
+    }
+};

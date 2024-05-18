@@ -3,7 +3,7 @@ private:
 vector<vector<string>> result;
 void backtracking(int n, int row, vector<string>& chessboard) {
     if (row == n) {
-        result.push_back(chessboard);
+        result.push_back(chessboard);//只有找到答案时才会返回
         return;
     }
     for (int col = 0; col < n; col++) {

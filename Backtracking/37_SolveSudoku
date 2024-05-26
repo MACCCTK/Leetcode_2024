@@ -7,7 +7,7 @@ bool backtracking(vector<vector<char>>& board) {
                 for (char k = '1'; k <= '9'; k++) {
                     if (isValid(i, j, k, board)) {
                         board[i][j] = k;           
-                        if (backtracking(board)) return true; // 如果找到合适一组立刻返回(找完一排还是找完所有？)
+                        if (backtracking(board)) return true; // 找到一个结果（bool）/还是完成所有递归（void）
                         board[i][j] = '.'; 
                     }
                 }

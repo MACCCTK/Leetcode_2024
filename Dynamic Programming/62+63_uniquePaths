@@ -1,0 +1,96 @@
+class Solution {
+public:
+    int uniquePaths(int m, int n) {
+        vector<vector<int>> dp(m, vector<int>(n, 0));
+        for (int i = 0; i < m; i++) dp[i][0] = 1;
+        for (int j = 0; j < n; j++) dp[0][j] = 1;
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+            }
+        }
+        return dp[m - 1][n - 1];
+    }
+};
+
+//有障碍
+class Solution {
+public:
+    int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid) {
+        int m = obstacleGrid.size();
+        int n = obstacleGrid[0].size();
+        if (obstacleGrid[m - 1][n - 1] == 1 || obstacleGrid[0][0] == 1) //如果在起点或终点出现了障碍，直接返回0
+            return 0;
+        vector<vector<int>> dp(m, vector<int>(n, 0));
+        for (int i = 0; i < m && obstacleGrid[i][0] == 0; i++) dp[i][0] = 1;
+        for (int j = 0; j < n && obstacleGrid[0][j] == 0; j++) dp[0][j] = 1;
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                if (obstacleGrid[i][j] == 1) continue;
+                dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+            }
+        }
+        return dp[m - 1][n - 1];
+    }
+};
+
+
+//一维解法
+class Solution {
+public:
+    int uniquePaths(int m, int n) {
+        vector<int> dp(n);
+        for (int i = 0; i < n; i++) dp[i] = 1;
+        for (int j = 1; j < m; j++) {
+            for (int i = 1; i < n; i++) {
+                dp[i] += dp[i - 1];//滚动数组
+            }
+        }
+        return dp[n - 1];
+    }
+};
+
+class Solution {
+public:
+    int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid) {
+        if (obstacleGrid[0][0] == 1)
+            return 0;
+        vector<int> dp(obstacleGrid[0].size());
+        for (int j = 0; j < dp.size(); ++j)
+            if (obstacleGrid[0][j] == 1)
+                dp[j] = 0;
+            else if (j == 0)
+                dp[j] = 1;
+            else
+                dp[j] = dp[j-1];
+
+        for (int i = 1; i < obstacleGrid.size(); ++i)
+            for (int j = 0; j < dp.size(); ++j){
+                if (obstacleGrid[i][j] == 1)
+                    dp[j] = 0;
+                else if (j != 0)
+                    dp[j] = dp[j] + dp[j-1];
+            }
+        return dp.back();//返回非零值
+    }
+};
+
+//图论：m+n-2中取m-1的取法C
+class Solution {
+public:
+    int uniquePaths(int m, int n) {
+        long long numerator = 1; // 分子
+        int denominator = m - 1; // 分母
+        int count = m - 1;
+        int t = m + n - 2;
+        while (count--) {
+            numerator *= (t--);
+            while (denominator != 0 && numerator % denominator == 0) {//通过不断地除以 denominator 并递减 denominator 的值来简化 numerator，
+                                                                      //直到 numerator 不能再被当前的 denominator 整除或 denominator 为 0
+                numerator /= denominator;
+                denominator--;
+            }
+        }
+        return numerator;
+    }
+};

@@ -1,7 +1,7 @@
 class Solution {
 public:
     bool wordBreak(string s, vector<string>& wordDict) {
-        unordered_set<string> wordSet(wordDict.begin(), wordDict.end());//无序集合
+        unordered_set<string> wordSet(wordDict.begin(), wordDict.end());//创建一个词典的无序集合
         vector<bool> dp(s.size() + 1, false);
         dp[0] = true;
         for (int i = 1; i <= s.size(); i++) {   // 遍历背包|排列

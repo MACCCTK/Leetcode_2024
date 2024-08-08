@@ -1,0 +1,67 @@
+//给定一个二叉树, 找到该树中两个指定节点的最近公共祖先。
+//百度百科中最近公共祖先的定义为：“对于有根树 T 的两个节点 p、q，最近公共祖先表示为一个节点 x，满足 x 是 p、q 的祖先且 x 的深度尽可能大（一个节点也可以是它自己的祖先）。”
+//2024_0808 第一次回顾
+
+//Q1 后序遍历自带回溯
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if (root == q || root == p || root == NULL) return root;//处理叶子节点或正确节点
+        TreeNode* left = lowestCommonAncestor(root->left, p, q);
+        TreeNode* right = lowestCommonAncestor(root->right, p, q);
+        if (left != NULL && right != NULL) return root;
+        if (left == NULL && right != NULL) return right;
+        else if (left != NULL && right == NULL) return left;
+        else  { 
+            return NULL;
+        }
+
+    }
+};
+//时间复杂度：O(N)，其中 N 是二叉树的节点数。二叉树的所有节点有且只会被访问一次，因此时间复杂度为 O(N)。
+//空间复杂度：O(N) ，其中 N 是二叉树的节点数。递归调用的栈深度取决于二叉树的高度，二叉树最坏情况下为一条链，此时高度为 N，因此空间复杂度为 O(N)。
+
+//Q1 S2哈希解法
+class Solution {
+public:
+    unordered_map<int, TreeNode*> fa;
+    unordered_map<int, bool> vis;
+    void dfs(TreeNode* root){
+        if (root->left != nullptr) {
+            fa[root->left->val] = root;
+            dfs(root->left);
+        }
+        if (root->right != nullptr) {
+            fa[root->right->val] = root;
+            dfs(root->right);
+        }
+    }
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        fa[root->val] = nullptr;
+        dfs(root);
+        while (p != nullptr) {
+            vis[p->val] = true;
+            p = fa[p->val];//把这条路上的所有节点都标T
+        }
+        while (q != nullptr) {
+            if (vis[q->val]) return q;
+            q = fa[q->val];
+        }
+        return nullptr;
+    }
+};
+//时间复杂度：O(N)，其中 N 是二叉树的节点数。二叉树的所有节点有且只会被访问一次，从 p 和 q 节点往上跳经过的祖先节点个数不会超过 N，因此总的时间复杂度为 O(N)。
+//空间复杂度：O(N) ，其中 N 是二叉树的节点数。递归调用的栈深度取决于二叉树的高度，二叉树最坏情况下为一条链，此时高度为 N，因此空间复杂度为 O(N)，哈希表存储每个节点的父节点也需要 O(N) 的空间复杂度，因此最后总的空间复杂度为 O(N)。
+
+
+//Q2 二叉搜索树
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if (root->val > p->val && root->val > q->val) {
+            return lowestCommonAncestor(root->left, p, q);
+        } else if (root->val < p->val && root->val < q->val) {
+            return lowestCommonAncestor(root->right, p, q);
+        } else return root;
+    }
+};

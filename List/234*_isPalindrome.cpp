@@ -1,6 +1,7 @@
 // 给你一个单链表的头节点 head ，请你判断该链表是否为回文链表。如果是，返回 true ；否则，返回 false 。
+//2024_0808 第一次回顾
 
-//数组双指针
+//S1 数组双指针
 class Solution {
 public:
     bool isPalindrome(ListNode* head) {
@@ -17,9 +18,11 @@ public:
         return true;
     }
 };
+//时间复杂度：O(n)，其中 n 指的是链表的元素个数。第一步： 遍历链表并将值复制到数组中，O(n)。第二步：双指针判断是否为回文，执行了 O(n/2) 次的判断，即 O(n)。
+//空间复杂度：O(n)，其中 n 指的是链表的元素个数，我们使用了一个数组列表存放链表的元素值。
 
 
-// 快慢指针
+// S2 快慢指针
 class Solution {
 public:
     bool isPalindrome(ListNode* head) {
@@ -71,3 +74,5 @@ public:
     }
 };
 
+//时间复杂度：O(n)，其中 n 指的是链表的大小。
+//空间复杂度：O(1)。只会修改原本链表中节点的指向，而在堆栈上的堆栈帧不超过 O(1)。

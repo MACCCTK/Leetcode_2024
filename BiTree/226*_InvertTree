@@ -1,3 +1,7 @@
+//给你一棵二叉树的根节点 root ，翻转这棵二叉树，并返回其根节点。
+//2024_0808 第一次回顾
+
+//S1 队列解法
 class Solution {
 public:
     TreeNode* invertTree(TreeNode* root) {
@@ -17,6 +21,8 @@ public:
     }
 };
 
+
+//S2 栈解法（后序遍历左右根）
 class Solution {
 public:
     TreeNode* invertTree(TreeNode* root) {
@@ -29,8 +35,8 @@ public:
                 if (node->right) st.push(node->right); 
                 if (node->left) st.push(node->left);    
                 st.push(node);                          
-                st.push(NULL);
-            } else {
+                st.push(NULL);//记位置： NULL 节点用来标记什么时候该处理当前节点。在遍历过程中，当遇到 NULL 时，说明此时栈顶的那个实际节点的左右子节点都已经处理完毕
+            } else {//null节点
                 st.pop();
                 node = st.top();
                 st.pop();
@@ -40,3 +46,6 @@ public:
         return root;
     }
 };
+//时间复杂度：O(N)，其中 N 为二叉树节点的数目。我们会遍历二叉树中的每一个节点，对每个节点而言，我们在常数时间内交换其两棵子树。
+//空间复杂度：O(N)。使用的空间由递归栈的深度决定，它等于当前节点在二叉树中的高度。在平均情况下，二叉树的高度与节点个数为对数关系，即 O(logN)。而在最坏情况下，树形成链状，空间复杂度为 O(N)。
+
